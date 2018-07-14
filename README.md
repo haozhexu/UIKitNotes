@@ -22,7 +22,7 @@ int main(int argc, char * argv[]) {
 }
 ```
 
-An entry point is needed for many procedural-like languages in order to execute the program, having a connection with Objective C (and ultimately, C), an iOS app in Swift also has this characteristic, the entry point is `UIApplicationMain`, which:
+An entry point is needed for many procedural-oriented languages in order to execute the program, having a connection with Objective C (and ultimately, C), an iOS app in Swift also has this characteristic, the entry point is `UIApplicationMain`, which:
 
 1. instantiates `UIApplication`, the instance is referred to as `UIApplicaiton.shared`
 2. instantiates app delegate, which is the classed marked `@UIApplicationMain`, saves it as application instance's `delegate`
@@ -38,7 +38,7 @@ TODO: launching an app without storyboard
 
 - sometimes it can be useful to give window a `backgroundColor` just in case user could see it
 - earlier version of new project templates in Objective-C has `makeKeyAndVisible` inside `applicationDidFinishLaunching` so I assume the order of steps 7 and 8 are correct
-- there's an article from 2012 describing app launching sequence with a diagram, the diagram might be outdated but it's nevertheless good to see what it was back then, [here's the article](https://oleb.net/blog/2012/02/app-launch-sequence-ios-revisited/) 
+- there's an article describing app launching sequence with a diagram, the article is quite dated from 2012, even before the end of the world, thus the diagram might be outdated but it's nevertheless good to see what it was back then, [here's the article](https://oleb.net/blog/2012/02/app-launch-sequence-ios-revisited/) 
 
 ## UIWindow
 
