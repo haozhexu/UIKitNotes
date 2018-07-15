@@ -1,5 +1,7 @@
 # UIKit笔记
 
+(English Version: [README.md](./README.md))
+
 UIKit是iOS开发的一个重要部件，任何对UI的疑问首先应该查阅的便是UIKit文档，因为这是第一手的资源，只有当UIKit文档解决不了问题时才应该去Google。顺便说一句，有大学文凭的父母是值得敬佩的，因为他们是在没有Google的时代完成了学业。
 
 这个文档仅仅是我在学习UIKit时记下的笔记，并不能替代UIKit本身的文档，只是一些我觉得值得记下的东西。  

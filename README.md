@@ -1,5 +1,7 @@
 # UIKit Notes
 
+(中文版请看[README.cn.md](./README.cn.md))
+
 Apple's UIKit documentation should be referenced whenever something's not clear, since it's the most up to date source of truth regarding UIKit. Google is your friend only if Apple's doc doesn't help. On a side note, if one or both of your parents have higher education degree, you should admire them for the fact that they finished (ie. survived) university without Google.
 
 What is this document then? It's merely my notes taken when I was reading Apple's doc (along with some other online material), and it's not a detailed summary of UIKit, but only the things that I think are important to note.  
