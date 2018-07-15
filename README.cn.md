@@ -229,40 +229,54 @@ baseVC.present(modalVC, animated: true)
 
 ### 建立视图 / View Creation
 
-As described in [https://developer.apple.com/documentation/uikit/uiviewcontroller](https://developer.apple.com/documentation/uikit/uiviewcontroller), a view controller can load its view in several ways:
- 
-1. Storyboard can organize different scenes / view controllers with relations
-2. Nib file
-3. programatically using `loadView()`, actually, without implementing `loadView()` and no view instance assigned to view controller's `view`, by default a generic `UIView` instance is created and assigned to `self.view`
- 
-Note: view controller's `view` is lazily loaded, referring to UIViewController's `view` property before `view` is loaded can cause `view` creation with unexpected behaviour. `UIViewController` provides a few ways to workaround this:
 
-- `isViewLoaded` can be used to check whether the `view` has been loaded
-- `viewIfLoaded` is an optional and is non-nil only if the `view` has been loaded
-- `loadViewIfNeeded` can be called to explicitly load the view, this is preferred rather than calling `view`
+`UIViewController`的文档[https://developer.apple.com/documentation/uikit/uiviewcontroller](https://developer.apple.com/documentation/uikit/uiviewcontroller)里提到，View Controller有三种途径装载View：
 
-After view controller loads its `view`, the method `viewDidLoad` is called, where certain initialization task can be performed; __However__, at this point the view may not be added to the interface (ie. `view.superview` is `nil`), so any logic depending on `view`'s position and size should not be performed here.
+1. 通过Storyboard，并且还可以组织不同的场景(Scene)之间的过渡关系
+2. Nib (.xib) 文件
+3. 在`loadView()`方法中写代码。实际上，即使没有在`loadView()`方法里给`self.view`赋值，`self.view`也会被赋予一个新创建的`UIView`实例
 
-### Life Cycle Events
+**注意：**因为View Controller的`view`是在使用到的时候才会被装载，在被装载前使用`UIViewController`的`view`属性可能会导致不可预知的行为，`UIViewController`对此提供了一些解决方法：
+
+- `isViewLoaded`属性可以用来检查`view`是否已被装载
+- `viewIfLoaded`是可有可无(Optional)的属性，只有当`view`被装载后才是一个非`nil`的值
+- `loadViewIfNeeded`方法可以用来强制装载`view`，这个方法比直接使用`view`安全
+
+View Controller装载自己的`vew`之后，会调用`viewDidLoad`方法，这里面可以做一些初始化的工作，**注意：**这个时候`view`并不一定被显示出来，`view.superview`也许还是`nil`，所以任何依赖于`view`的位置和大小的逻辑都不应该在这里展开。
+
+### 生命圈事件 / Life Cycle Events
 
 `viewDidLoad`
 
-As name suggests, the view controller has loaded its views, outlets have been connected, do not assume the views have correct positions and sizes.
+正如其名，View Controller装载了自己的`view`后会调用这个方法，此时，UI的输出口(`@IBOutlet`)已经连接完成，但view的大小和位置还并不确定。
 
-`willTransition(to:with:)`
-`viewWillTransition(to:with:)`
+`func willTransition(to newCollection: UITraitCollection, 
+           with coordinator: UIViewControllerTransitionCoordinator)`
+
+当前对象的traits改变之前，UIKit会调用任何被影响到的View和View Controller的这个方法，继承这个方法可以根据`newCollection`的值来适当的改变当前的界面，例如一个View Controller的`children`包含了四个子View Controller，竖屏时为2x2（二行二列）分布，横屏时则变成1x4（一行四列）分布，并且可以用参数`coordinator`来实现动画效果。**注意：**不要忘了呼叫`super`方法。
+
+`func viewWillTransition(to size: CGSize, 
+           with coordinator: UIViewControllerTransitionCoordinator)`
+           
+当前对象的大小改变前会调用这个方法。
+
 `traitCollectionDidChange(_:)`
 
-Changes of the view controller's view, and/or trait collection. The first two methods require calling `super`
+当前的界面环境改变后，这个方法会被调用，如果要实现这个方法，别忘了一开始呼叫对应的`super`方法。
 
 `updateViewConstraints`
+
+当View Controller需要更新constraints时会调用此方法，重写这个方法来做一些constraints的调整。**注意：** 改变constraints的代码一般只需要放在具体事件后，比如按一个按钮会导致一些constraints的改变，那么就可以直接在按钮的Action里改变constraints，只有当constraints复杂时才需要考虑重写这个方法。TODO: 举个例子
+
 `viewWillLayoutSubviews`
 `viewDidLayoutSubviews`
 
-Corresponding events for `view` are `updateConstraints` and `layoutSubviews`
+这两个方法是当`UIViewController`的`view`重新布局其`subview`之前和之后被调用。
 
 `willMove(toParentViewController:)`
 `didMove(toParentViewController:)`
+
+这两个方法是当`UIViewController`被加入到另一个容器View Controller的`children`之前和之后被调用。
 
 Events sent during view controller containment: [https://developer.apple.com/library/content/featuredarticles/ViewControllerPGforiPhoneOS/ImplementingaContainerViewController.html](https://developer.apple.com/library/content/featuredarticles/ViewControllerPGforiPhoneOS/ImplementingaContainerViewController.html)
 
