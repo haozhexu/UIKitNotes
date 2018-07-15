@@ -22,6 +22,7 @@
 		7250F670209D7DF4004E03DF /* ModalDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7250F66F209D7DF4004E03DF /* ModalDemo.swift */; };
 		7250F672209E4DD0004E03DF /* DemoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7250F671209E4DD0004E03DF /* DemoViewModel.swift */; };
 		7250F674209E4FF6004E03DF /* Demos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7250F673209E4FF6004E03DF /* Demos.swift */; };
+		729B6B7C20F98F4E001A1B6C /* README.cn.md in Resources */ = {isa = PBXBuildFile; fileRef = 729B6B7B20F98F4D001A1B6C /* README.cn.md */; };
 		72B5FF4D2090A48100394485 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 72B5FF4C2090A48100394485 /* README.md */; };
 		72CA7BE2209A735500931EDC /* LoggableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72CA7BE1209A735500931EDC /* LoggableView.swift */; };
 		72CA7BE4209A75FF00931EDC /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72CA7BE3209A75FF00931EDC /* Logger.swift */; };
@@ -68,6 +69,7 @@
 		7250F66F209D7DF4004E03DF /* ModalDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalDemo.swift; sourceTree = "<group>"; };
 		7250F671209E4DD0004E03DF /* DemoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoViewModel.swift; sourceTree = "<group>"; };
 		7250F673209E4FF6004E03DF /* Demos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Demos.swift; sourceTree = "<group>"; };
+		729B6B7B20F98F4D001A1B6C /* README.cn.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.cn.md; sourceTree = "<group>"; };
 		72B5FF4C2090A48100394485 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		72CA7BE1209A735500931EDC /* LoggableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggableView.swift; sourceTree = "<group>"; };
 		72CA7BE3209A75FF00931EDC /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 		72B5FF4B2090A47100394485 /* Documents */ = {
 			isa = PBXGroup;
 			children = (
+				729B6B7B20F98F4D001A1B6C /* README.cn.md */,
 				72B5FF4C2090A48100394485 /* README.md */,
 			);
 			name = Documents;
@@ -331,6 +334,7 @@
 				722E439220A7FD74001D3012 /* LifeCycleDemo.storyboard in Resources */,
 				72B5FF4D2090A48100394485 /* README.md in Resources */,
 				72D067DF2090A21D0064A8EC /* Main.storyboard in Resources */,
+				729B6B7C20F98F4E001A1B6C /* README.cn.md in Resources */,
 				722E438720A63B43001D3012 /* ModalDemo.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
