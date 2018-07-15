@@ -326,7 +326,7 @@ Apple keeps refining its SDK in new iOS versions, it's good to keep an eye on th
 anchorWithOffset(to:)
 ```
 
-iOS 11 provided meethods for creating constraints with constant based on system spacing, this can be useful since the system spacing can change in certain circumstances.
+iOS 11 provided methods for creating constraints with constant based on system spacing, this can be useful since the system spacing can change in certain circumstances.
 
 ### Visual format
 
@@ -433,7 +433,7 @@ Some people may think that eye is the tool for seeing, strictly speaking, eye is
 - Changing a view's properties is merely a convenient way of changing properties of its underlying layer, e.g. a view's `clipsToBounds` vs its layer's `masksToBounds`
 - Layer can have multiple sub-layers
 - The order of a layer's `sublayers` doesn't only depend on their index in the `sublayers` array, but also each layer's `zPosition`: sublayers with the same `zPosition` value are drawn in the order of the index in the `sublayers` array, layers with lower `zPosition` are drawn before layers with higher `zPosition` value
-- a layer created in code has `frame` and `bounds` all equal to `CGRect.zero` (ie. not visibule).
+- a layer created in code has `frame` and `bounds` all equal to `CGRect.zero` (ie. not visible).
 
 **Note**, since layer's `zPosition` has a default value of 0.0, by default, they behave as if they are ordered by the order in the sublayers array, and because view hierarchy is the same as layer hierarchy, changing the `zPosition` of a layer which is a subview's underlying layer, could change the order of which the subviews are drawn.
 

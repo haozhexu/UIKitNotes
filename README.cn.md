@@ -278,49 +278,52 @@ View Controller装载自己的`vew`之后，会调用`viewDidLoad`方法，这�
 
 这两个方法是当`UIViewController`被加入到另一个容器View Controller的`children`之前和之后被调用。
 
-Events sent during view controller containment: [https://developer.apple.com/library/content/featuredarticles/ViewControllerPGforiPhoneOS/ImplementingaContainerViewController.html](https://developer.apple.com/library/content/featuredarticles/ViewControllerPGforiPhoneOS/ImplementingaContainerViewController.html)
+包含`children`的容器View Controller常见的事件[https://developer.apple.com/library/content/featuredarticles/ViewControllerPGforiPhoneOS/ImplementingaContainerViewController.html](https://developer.apple.com/library/content/featuredarticles/ViewControllerPGforiPhoneOS/ImplementingaContainerViewController.html)：
 
 `viewWillAppear(_:)`
 `viewDidAppear(_:)`
 `viewWillDisappear(_:)`
 `viewDidDisappear(_:)`
 
-When `view` is being added to or removed from the interface, they all need to call `super` when overriding. To examine the reason for a view's appearing/disappearing, consult the following properties:
+以上的方法在`view`被加入到界面或从界面移除时被分别调用，重写其中任何一个方法都要记得呼叫`super`；下面几个属性可以用来判断`view`出现或移除的具体原因：
 
 `isBeingPresented`
 `isBeingDismissed`
 `isMovingToParentViewController`
 `isMovingFromParentViewController`
 
-Use the Demo app (ie. build and run this project) and check Life Cycle Test for detailed life cycle events.
+此Demo演示app中的Life Cycle Test可以看到UI不同阶段所出发的具体事件。
 
-## View Layout
+## 视图布局 / View Layout
 
-View layout can be done in three ways:
+View的布局有三种途径：
 
-1. manual layout
-2. autoresizing
-3. autolayout
+1. 手工布局
+2. 自动缩放 (auto-resizing)
+3. 自动布局 (auto-layout)
 
-From what I've seen, there's only one trigger for laying out views, that is, whenver a view is resized, its `layoutSubviews` is invoked, the difference between the three ways of layout is as follows:
+当一个View大小改变时，它的`layoutSubviews`会被调用，以上三种布局方式的区别在于：
 
-- manual layout: perform your own layout in `layoutSubviews`, this isn't usually done, but it offers the most freedom of laying out views, you can even implement your own system of auto layout
-- autoresizing: done via autoresizing masks, in recent iOS versions it's observed that autoresizing masks are translated into layout constraints __before__ `layoutSubviews`, and `layoutSubviews` will just work as autolayout:
-- autolayout: implemented by the SDK as part of `layoutSubviews`, you specify layout constraints which are then evaluated to work out each view's position and size
+- 手工布局：这种方式一般用不到；你自己来决定`subviews`该如何分布，包括每个View的位置和大小，这是自由度最大的布局方式，你甚至可以创造一个定制的布局系统
+- 自动缩放：通过View的`autoresizingMask`来实现，我发现最近几个版本的iOS会先把`autoresizingMask`转换成布局约束(layout constraints)，然后再通过自动布局来决定每个View的位置和大小
+- 自动布局：UIKit自带的布局机制，你针对每个View以及不同View之间的位置关系定义一系列布局规则，然后UIKit会根据你定义的规则来计算出每个View实际显示出来的位置和大小
 
-### Layout Constraint
+### 布局约束条件 / Layout Constraint
 
-Each constraint is a linear equation with the following format:
+每个约束规则都可以被描述为一个线性表达式：
 
 ```
 item1.attribute1 (relation to) multiplier x item2.attribute2 + constant
+A.属性1 关系于(等于、大于、小于等等) B.属性2 x multiplier增幅倍数 + constant常量
 ```
 
-It can describe the width or height of a view, or a relationship between an attribute of one view and an attribute of another view, the two attributes don't have to be the same attribute, and the two views should have a common ancestor view.
+它也可以描述一个View的宽或者高，或者两个不同View的某个属性间的关系，两个View的属性可以不是同一个属性，并且两个View得有一个共有的容器View。
+
+TODO: 举个例子
 
 Items:
 
-- `firstItem`, `secondItem`, in case if constraint describes a views width or height, `secondItem` would be `nil` and `secondAttribute` would be `.notAnAttribute`
+- `firstItem`, `secondItem` 如果某个布局约束描述的是一个View的宽或者高，则`secondItem`会等于`nil`，`secondAttribute`会等于`.notAnAttribute`
 
 Attributes:
 
@@ -328,152 +331,155 @@ Attributes:
 - `.top`, `.bottom`, `.left`, `.right`, `.leading`, `.trailing`
 - `.firstBaseline`, `.lastBsaeline`
 
-Note: `.leading` / `.trailing` could be either `.left` / `.right` or `.right` / `.left` depends on system locale, some locals have text written from right to left.
+**注意：** `.leanding`和`.trailing`不一定是左和右，取决于系统区域设置，有些文化的文字书写是从右向左的；因此不要认为`.leading`一定是左边，`.trailing`一定是右边。
 
-Side note:
+多说一句：有一些古文字是从上往下写的，这里面的智慧是，看书的人从上到下看完一列字后，再看第二列的文字时必须把目光从第一列的最下面移动到第二列的最上面，这个过程中眼睛会不自觉的眨一下，这样的好处是看书久了可以减轻眼睛的疲劳。
 
-A few ancient scripts were written in the order of top to bottm, right to left, the wisdom is that, readers of the scripts naturally blink eyes after finishing a (vertical) line and starting a new line from the top, which is good for reliefing dry eyes; English text is nearly impossible to be written in such a way.
-
-Relation:
+关系：
 
 `.equal`, `.lessThanOrEqual`, `.greaterThanOrEqual`
 
-Priority:
+优先权：
 
-Constraint has a priority from 1000 (high) down to 1 (low), this is used to determine the order of which constraints are applied. It can be useful in certain cases where you want a seconary constraint when the primary constraint can't be satisfied (TODO: example needed). In iOS 11, `UILayoutPriority` structure is used instead of a number for priority, priority values are still numbers wrapped as the struct's `rawValue`.
+Constraint有一个优先权的属性，从高 (1000) 到低 (1)，用来决定执行约束条件的顺序。一个常见的用途是主要的约束条件无法满足时需要一个候补约束条件（TODO: 举个例子）。从iOS 11开始，`UILayoutPriority`是一个结构而不再是一个简单的数值，具体的优先权数值作为`rawValue`被包含在结构里。
 
-`UIView` has a property `constraints`, along with methods for adding and removing constraints; Constraints should be added to the view who's closest up the view hierarchy from views involved in the constraint:
+`UIView`有一个`constraints`属性，还有可以用来添加或删除约束条件的方法；约束Constraint应该被添加到与此约束针对的View最接近的父View里：
 
-- constraint specifying a view's width or height is added to the view itself
-- constraint specifying a relation between a view and its superview is added to the superview
-- constraint specifying a relation between two sibling views is added to their common superview
+- 指定一个View的长或宽的约束要加到这个View本身
+- 指定一个View与其父View关系的约束要加到父View里
+- 指定两个同层次View之间关系的约束要加到这两个View共同的父View里
 
-Since these could be determined without human brain, iOS 8 introduced a method in `NSLayoutConstraint` to `activate` an array of constraints, which adds constraints to correct views; Correspondingly there is also the method `deactivate(_:)` to remove constraints. A single constraint can be activated / deactivated by setting its `isActive` property.
+上面这三条关于约束要加到哪里的规则，不需要思考就可以由系统自动判断，所以从iOS 8开始，`NSLayoutConstraint`有了一个方法叫`activate`，参数是一个包含了约束的数组，这个方法把参数传入的各种约束添加到适当的View里；相对应的还有一个`deactivate(_:)`方法用来移除已经加入到View里的约束；单一的约束可以设置它本身的`isActive`布尔属性来激活和移除。
 
-Since auto-layout is a system way of laying out view in `layoutSubviews`, technically you can change views' frames in `layoutSubviews` even when using auto-layout, but this is usually not a good practice.
+因为自动布局也只是一个系统自带的，在`layoutSubviews`时执行的布局方式，技术上来讲，在`layoutSubviews`里你仍然可以改变View的`frame`，但是一般不需要这么搞。
 
-### Anchor
+### 锚点 / Anchor
 
-The way `NSLayoutConstraint` creates constraint can be capable for creating all kinds of constraints, however it's not very straight forward. A short path is to use anchor properties of `UIView`. For more details please see [Programatically Creating Constraints](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/ProgrammaticallyCreatingConstraints.html).
+`NSLayoutConstraint`类提供了一个普遍适用的创建布局约束的方法，然而正因为普遍适用，所以用起来并不是很方便。就好像一个N合一的多功能机器，每个功能都只是堪用而并没有太好的用户体验。另一个简洁的办法是用UIView的anchor。具体的信息可以参考[Programatically Creating Constraints](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/ProgrammaticallyCreatingConstraints.html).
 
-Apple keeps refining its SDK in new iOS versions, it's good to keep an eye on these updates in order to not feel outdated. iOS 10 added a method to create "layout dimension object" from two anchors:
+每个新的iOS SDK都有可能对已有的东西进行更新，时不时的关注这些信息可以让自己不被时代的车轮抛弃。iOS 10新增了以两个Anchor之间距离来创建新Anchor的方法：
 
 ```
-anchorWithOffset(to:)
+func anchorWithOffset(to otherAnchor: NSLayoutXAxisAnchor) -> NSLayoutDimension
 ```
 
-iOS 11 provided meethods for creating constraints with constant based on system spacing, this can be useful since the system spacing can change in certain circumstances.
+返回的`NSLayoutDimension`对象则是一个新的Anchor，用来表示两个Anchor之间的距离，如果把另外一个View的`widthAnchor`约束为与这个新Anchor相等，那么这个View的宽就始终会等于前两个Anchor之间的距离。
 
-### Visual format
+iOS 11增加了根据系统默认间距来创建布局约束的一些方法，创建的约束会根据系统默认间距的改变而改变。
 
-Visual format can represent multiple constraints in one go, for details please read [Visual Format Language](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/VisualFormatLanguage.html).
+### 可视格式 / Visual format
 
-### Layout Events
+可视格式的布局可以用一行ASCII文字来表达许多个布局约束，然而可读性却可能会降低，所以实际用的并不多。具体信息参考[Visual Format Language](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/VisualFormatLanguage.html).
+
+### 布局事件 / Layout Events
 
 **`updateConstraints`**
 
-Propagated from the deepest subview up the hierarchy, invoked when the runtime determines that the view might need to configure its constraints - so you can alter the constraints if needed, but don't forget to call `super`, and don't call this method directly, use `setNeedsUpdateConstraints` and `updateConstraintsIfNeeded`.
+App运行时如果觉得你的View需要设置布局约束，就会从View层次结构中最深层的subview往上传播这个方法，因此你可以改动布局约束，不要忘了呼叫`super`方法，而且不要直接调用这个方法，需要更新布局约束时可以用`setNeedsUpdateConstraints` 和 `updateConstraintsIfNeeded`。
 
 **`traitCollectionDidChange(_:)`**
 
-Invoked at launch time as well as when trait collection did change, as its name suggests. Note, trait collection change doesn't only happen when device is rotated, but also in certain other circumstances, like multitasking split on iPad. If UI has size-class dependent behaviour, this is a place to do it, such like updating constraints, adding or removing views.
+程序启动时以及traits改变时会调用此方法，**注意：** traits除了会在设备旋转时改变，还有一些情况下也会发生traits的变化，比如iPad上的多任务分屏时。如果你的UI有跟traits的size-class相关的逻辑，则应该放在这个方法里，比如更新布局约束或添加、移除View。
 
 **`layoutSubviews`**
 
-Invoked from top and propogated down the view hierarchy, when change happens for example, constraint change, view content change (e.g. text of label changes), and superview size change. It's an opportunity to perform manual layout after autoresizing is done, don't forget to call `super` if using autolayout. Again, do not call this method directly, use `setNeedsLayout` and `layoutIfNeeded`.
+这个方法从View层次结构中最上层往下传播（跟`updateConstraints`相反），调用的原因包括布局约束的改变，View内容的改变（比如一个Label的text发生了变化），以及`superview`的大小变了。这是一个自动缩放(auto-resizing)后手动调整布局的机会，用自动布局(auto-layout)时别忘了呼叫`super`方法。不要直接调用这个方法，而是通过`setNeedsLayout` 和 `layoutIfNeeded`。
 
-It's fine to tweak layout outcome by overriding this method, first call `super` to evaluate autolayout, then change the things that are not quite right, in the end, call `super` again. Make sure any change should only involve subviews of the view, because this event is propogated down the view hierarchy. Do not think about `setNeedsUpdateConstraints`, that is propogated up the view hierarchy and should have finished at this point.
+重写这个方法来对自动布局的结果进行微调是没问题的，先呼叫`super`方法，然后改变需要调整的View的布局，最后再呼叫`super`方法。**注意：**任何改变必须只针对View的`subviews`，因为这个方法在View层次结构里是从上往下传播的；别想着`setNeedsUpdateConstraints`，那个方法是从下往上传播的，并且此刻应该已经结束。
 
-## Margins, Guides and Safe Area
+## 边缘空白，辅助线和安全区域 (Margins, Guides and Safe Area)
 
-UIKit has a concept of "edge insets" for optimal user friendliness as well as preventing content from underlapping system components such like status bar, navigation bar, toolbar and tab bar. There has been quite a few changes in term of how margins work over the last few iOS versions, it's not straight forward to understand every single bit of it, documentation on each bit explains only that bit, and always leaves you with the sentence below:
+UIKit有一个边缘嵌入(edge insets)的概念，用来保证图形界面的用户友好以及防止程序的View跟系统控件重叠，比如屏幕上方的状态条和导航条，下面的标签条。最近几个版本的iOS更新在这些方面改变了许多，以至于理解其中任何一点都得要理解其他许多方面，官方的文档对每个独立的概念进行了解释，却没有更深入的解释各个概念的关联，当你查阅文档想一探究竟时，往往看到的只是这句话：
 
-> Thank you Mario! But our princess is in another castle!
+> Thank you Mario! But our princess is in another castle!  
+> （谢谢你马里奥！但是我们的公主在另一个城堡！）
 
 ### `UIEdgeInsets`
-A struct consisting of four floats for edge inset values.
+一个包含四个边缘edge insets的`struct`结构
 
 ### `UILayoutGuide`
-A placeholder inserted in view hierarchy that has all kinds of anchors just like a `UIView`. The benefit of layout guide compared to placeholder views are reduced cost for maintaining placeholder views as well as prevent invisible placeholder views intercepting messages intended for other views.
+有时候在View布局时需要用一些起到占位作用而没有实际内容的View，用`UIView`的问题是，虽然只是为了布局占位，却会实际消耗内存，而`UILayoutGuide`就解决了这个问题，它有跟`UIView`一样的各种anchor，却不会像`UIView`视图那样需要消耗内存和处理性能，并且也不会像`UIView`那样阻挡用户的触屏交互
 
-### `topLayoutGuide` and `bottomLayoutGuide` (deprecated in iOS 11)
-Introduced in iOS 9 as a placeholder for possible top and bottom bars (e.g. navigation bar, tab bar ,etc), so that views constrained with respect to the layout guides won't underlap with system components.
+### `topLayoutGuide` 和 `bottomLayoutGuide` (iOS 11开始淘汰)
+iOS 9开始有的两个`UILayoutGuide`，代表屏幕最上方和最下方可能会有的各种条（如状态条，导航条，标签条等），依照这两个Guide来约束布局可以确保你的UI不会被系统的UI组件覆盖
 
 ### `safeAreaLayoutGuide`
-Introduced in iOS 11 to replace `topLayoutGuide` and `bottomLayoutGuide`.
+iOS 11开始有的这个，替代了`topLayoutGuide` 和 `bottomLayoutGuide`
 
 ### `safeAreaInsets`
-Same as `safeAreaLayoutGuide` but as edge inset values.
+和 `safeAreaLayoutGuide` 相同，但类型是边缘inset值
 
 ### `safeAreaInsetsDidChange`
-A method of `UIView` which is invoked when the view's safe area has changed.
+`UIView`的一个方法，当这个View的安全区域(safe area)发生改变时会被呼叫
 
 ### `viewSafeAreaInsetsDidChange`
-A method of `UIViewController`, invoked when safe area of the view controller's main views has changed.
+`UIViewController`的一个值，当这个View Controller自身的View的安全区域发生改变时被呼叫
 
 ### `additionalSafeAreaInsets`
-Insets further on top of the automatic safe area.
+在系统的安全区域基础上再往里深入额外的Insets
 
 ### `layoutMargins`
-A visual buffer between a view’s content and any content outside of the view’s bounds. To set up constraints that respect the layout margins, enable the _Constrain to margins_ option in Xcode
+View的`subviews`和View的`bounds`之外的一个视觉缓冲，如果要遵照`layoutMargins`来设置布局，可以在XCode里点选_Constrain to magins_
 
 ### `layoutMarginsGuide`
-`layoutMargins` as a `UILayoutGuide`
+同样的`layoutMargins`，数据类型为`UILayoutGuide`
 
 ### `directionalLayoutMargins`
-Introduced in iOS 11, this is usually preferred over `layoutMargins`, it takes into account the language direction for device locale, some languages have right-to-left text
+iOS 11开始有的这个，比`layoutMargins`更好，它考虑到了设备当前的语言区域，因为有些语言文字顺序是从右到左，所以`.leading`和`.trailing`不一定是`.left`和`.right`
 
 ### `preservesSuperviewLayoutMargins`
-A subview overlapping its superview's margin may have the amount of overlap as its own minimum margin. For example, `containerView` has `directionalLayoutMargins` with top inset of 50, its subview `childView` is pinned 20 points to the top edge of the `containerView`, and `childView` has `preservesSuperviewLayoutMargins` set to `true`, thus `childView` would have a top margin of 30.
+一个subview如果覆盖了它的`superview`的margin，可以将覆盖的margin作为自己的最小margin。例如：`containerView`的`directionalLayoutMargins`最顶上有50的inset，作为它的子View，`childView`顶端跟`containerView`顶端有20点的约束距离（覆盖了30点的margin），如果`childView`的`preservesSuperviewLayoutMargins`为`true`，那么`childView`就会有30点的顶部margin
 
 ### `insetsLayoutMarginsFromSafeArea`
-Default is `true`, a view's effective margin is calculated with safe area taken into account. For example, a view with a top margin of 12 underlaps status bar who's height is 20, then subviews pinned to top margin of the view would appear 32 points below the top of the view.
+默认值为`true`，一个View的有效margin会考虑安全区域。例如：`aView`的顶端有12点margin，而它的顶端跟屏幕顶端的状态条重叠，状态条的高度为20点，那么`aView`的子View`sonView`如果按照`aView`顶部margin来约束的话，`sonView`则会被布局在距离`aView`顶部32点的位置，或者说，实际上`sonView`的顶部距离屏幕上面的状态条会有12点距离。
 
 ### `systemMinimumLayoutMargins`
-Introduced in iOS 11, `UIViewController`'s `systemMinimumLayoutMargins` specifies margins on the view controller's view as a minimum, below which the layout margins for the main view would not be effective. By default it has 0 for top and bottom and 16 on each sides for small devices, and 20 for larger devices.
+iOS 11增加了这个，`UIViewController`的`systemMinimumLayoutMargins`属性定义了View Controller的`view`的最低Margin，如果你也给这个View指定了一个Margin，那么系统会用两个Margin里最大的Margin作为实际Margin。如果你不想用系统最小Margin，可以设置`viewRespectsSystemMinimumLayoutMargins`。默认情况下View Controller的最小Margin是上下为0，左右两边在小设备上为16，大些的设备上为20。
 
 ### `viewRespectsSystemMinimumLayoutMargins`
-A boolean whose value is `true` by default, setting it to `false` will ignore `systemMinimumLayoutMargins` as its name says.
+默认值为`true`，设为`false`时View Controller的`systemMinimumLayoutMargins`会被忽略。
 
-## Traits
+## 特性 / Traits
 
-Due to the variation of devices, such like iPhones with different screen sizes, as well as iPad with bigger display realestate, sometimes constraints alone are not enough to manage layout, thus traits are introduced.  
+因为屏幕尺寸各异，布局约束有时候不足以管理界面的布局，因此有了Traits。
 
-> All wise men share one __trait__ in common: the ability to listen.
+> All wise men share one __trait__ in common: the ability to listen.  
+> 所有聪明人都有一个共同__特征__：懂得倾听。
 
-Traits in UIKit specify the current environment associated with certain objects, like views and view controllers.
+UIKit里的Traits定义了针对特定对象（如View和View Controller）的当前环境信息。
 
-- `horizontalSizeClass`, `verticalSizeClass`: general width and height of the interface, possible valuess:
- - `compact`, `regular` and `unspecified`
-- `displayScale`: whether the content is displayed on a Retina display or a standard-resolution display. Use it (as needed) to make pixel-level layout decisions or to choose which version of an image to display.
-- `userInterfaceIdiom`: type of the device, iPad or iPhone
+- `horizontalSizeClass`，`verticalSizeClass`：当前界面的_大小_，可能的值：
+ - `compact`，`regular` 以及 `unspecified`
+- `displayScale`：当前的显示屏是否是Retina视网膜显示屏，这个可以用来执行像素相关的逻辑，或者用来选择合适的图片
+- `userInterfaceIdiom`：设备的类型，iPad或者iPhone
 
-**Note**, Apple suggests that the use of `userInterfaceIdiom` should be avoided as much as possible, unlike Android where developers may not have a definite list of devices to support, they have no choice but have to think in a more generic way; However, in early days there were only two types of screen sizes in the mind of developers: iPhone and iPad. Now the mindset should be adapted to size classes - how the interface should look like on a screen with `.regular` width and/or `.compact` height? How it works if the device has both width and height be `.compact`? These questions should be asked and thought about, instead of thinking iPad or iPhone. _this is a common mistake that not only developers, but also designers make when designing UI._
+**注意：** 苹果建议尽量要避免使用`userInterfaceIdiom`。最开始的iPhone或iPad只有固定的单一分辨率，可以针对设备类型来设计界面，可现在各种设备分辨率都不一致，所以思维模式应该改变，要问的问题不应该是当前设备是iPhone还是iPad，而应该是这个屏幕的UI在`.regular`宽和/或`.compact`高的时候如何布局？如果宽和高都是`.compact`时是否应该有些调整？_这不仅仅是程序员容易犯的错误，也是设计师常会犯的错。_
 
-### Event Cycle
+### 时间周期 / Event Cycle
 
-On a typical device rotation, size classes changes are propogated from main `window` to all view controllers in its hierarchy:
+一个典型的设备旋转时，Size Class的改变会从主`window`传递到所有视图层次结构里的View Controller：
 
-1. `willTransitionToTraitCollection:withTransitionCoordinator:` - tells each relevant view controller that its traits are about to change.
-2. `viewWillTransitionToSize:withTransitionCoordinator:` - tells each relevant view controller that its size is about to change.
-3. `traitCollectionDidChange:` - tells each relevant view controller that its traits have now changed.
+1. `willTransitionToTraitCollection:withTransitionCoordinator:` - 告诉相关的View Controller，trait collection即将要发生变化
+2. `viewWillTransitionToSize:withTransitionCoordinator:` - 告诉相关的View Controller，View的大小要发生变化
+3. `traitCollectionDidChange:` - 告诉相关的View Controller，Trait Collection变化已经完成了
 
-## Layers
+## 图层 / Layers
 
-> Life is like an onion: you peel off layer after layer, then you find there is nothing in it.
+> Life is like an onion: you peel off layer after layer, then you find there is nothing in it.  
+> 人生就像是一个洋葱：你一层一层剥开，却发现里面什么都没有。
 
-Some people may think that eye is the tool for seeing, strictly speaking, eye is merely a tool that allows light to pass through onto retina behind the eye ball, and retina would then convert the light it receives into something that the optic nerve could understand, which then forms the image **in the brain**. Analog to this, a `UIView` instance has a `CALayer` instance, their relationship is similar to eye ball, retina and optic nerve, that a view is a delegate of its layer, and the layer does the actual drawing.
+不少人认为看东西用的是眼睛，严格地说，眼睛只是一个传导光的工具，光通过眼球传到视网膜上，再被转换成某种视神经可以理解的信号，最后**在大脑中成像**；与此类似，每个`UIView`都有一个相应的`CALayer`，他们的关系正如眼球、视网膜和视神经一样，`UIView`只是它Layer的代理，真正渲染显示的是Layer。
 
-- Custom `CALayer` subclass for `UIView` can be implemented by subclassing `UIView` and implementing its `layerClass` property to return the class of the custom `CALayer` class
-- View hierarchy is layer hierarchy: if view A has a subview B, then view A's layer is also the superlayer of B's layer
-- Changing a view's properties is merely a convenient way of changing properties of its underlying layer, e.g. a view's `clipsToBounds` vs its layer's `masksToBounds`
-- Layer can have multiple sub-layers
-- The order of a layer's `sublayers` doesn't only depend on their index in the `sublayers` array, but also each layer's `zPosition`: sublayers with the same `zPosition` value are drawn in the order of the index in the `sublayers` array, layers with lower `zPosition` are drawn before layers with higher `zPosition` value
-- a layer created in code has `frame` and `bounds` all equal to `CGRect.zero` (ie. not visibule).
+- 如果想用自定义的`CALayer`类作为`UIView`的layer，那么可以继承`UIView`，在子类里重写`layerClass`属性并返回你自己的`CALayer`类型
+- View的层次结构实际上是Layer的层次结构：如果`viewA`有一个子View `viewB`，那么`viewB.layer`也是`viewA.layer`的子Layer
+- 改变一个View的属性实际上改变的是此View的Layer的属性，例如View的`clipsToBounds`对应的是Layer的`masksToBounds`
+- 一个Layer可以有多个子Layer
+- `sublayers`里layer的顺序不仅仅是它们在`sublayers`里的先后位置，还跟Layer的`zPosition`有关：相同`zPosition`的子Layer会按照它们在`sublayers`里的位置来渲染，并且，`zPosition`小的Layer比`zPosition`大的Layer先被渲染。
+- 用代码创建的Layer，其`frame`和`bounds`都为`CGRect.zeo`（不可见）
 
-**Note**, since layer's `zPosition` has a default value of 0.0, by default, they behave as if they are ordered by the order in the sublayers array, and because view hierarchy is the same as layer hierarchy, changing the `zPosition` of a layer which is a subview's underlying layer, could change the order of which the subviews are drawn.
+**注意：**因为Layer的`zPosition`默认值为0.0，所以默认情况下`sublayers`里的Layer的显示顺序就是它们在`sublayers`数组里的先后顺序，而因为View层次结构等同于Layer层次结构，改变一个Layer的`zPosition`会导致View显示顺序的改变。
 
-A layer's position within its superlayer is determined by `position` and `anchorPoint`
+一个Layer在其父Layer里的位置由它的`position`和`anchorPoint`决定：
 
-`position`: a point in the superlayer's coordinate system
-`anchorPoint`: where the `position` is located within the layer itself, from top-left (0.0, 0.0) to bottom-right (1.0, 1.0), by default, `anchorPoint` is (0.5, 0.5), which means the layer's `position` is the layer's center
+`position`：父Layer坐标系统里的一个点
+`anchorPoint`：指定`position`在Layer本身的什么位置，从左上角 (0.0, 0.0) 到右下角 (1.0, 1.0)，默认为 (0.5, 0.5)，意味着Layer的`position`表示的是这个Layer中心点的位置
