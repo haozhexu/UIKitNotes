@@ -21,7 +21,11 @@
 		7250F66E209D5ED3004E03DF /* Demoable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7250F66D209D5ED3004E03DF /* Demoable.swift */; };
 		7250F670209D7DF4004E03DF /* ModalDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7250F66F209D7DF4004E03DF /* ModalDemo.swift */; };
 		7250F672209E4DD0004E03DF /* DemoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7250F671209E4DD0004E03DF /* DemoViewModel.swift */; };
-		7250F674209E4FF6004E03DF /* Demos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7250F673209E4FF6004E03DF /* Demos.swift */; };
+		72597C7920FCC3AB0089CCDC /* ViewInteractionDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72597C7820FCC3AB0089CCDC /* ViewInteractionDemo.swift */; };
+		72597C7B20FCC43C0089CCDC /* DemoDomains.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72597C7A20FCC43C0089CCDC /* DemoDomains.swift */; };
+		72597C7D20FCC50E0089CCDC /* UIStoryboard+ViewAlphaUserInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72597C7C20FCC50E0089CCDC /* UIStoryboard+ViewAlphaUserInteraction.swift */; };
+		72597C7F20FCC53B0089CCDC /* AlphaInteractionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72597C7E20FCC53B0089CCDC /* AlphaInteractionViewController.swift */; };
+		72597C8120FCC5D70089CCDC /* AlphaInteractionDemo.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72597C8020FCC5D70089CCDC /* AlphaInteractionDemo.storyboard */; };
 		729B6B7C20F98F4E001A1B6C /* README.cn.md in Resources */ = {isa = PBXBuildFile; fileRef = 729B6B7B20F98F4D001A1B6C /* README.cn.md */; };
 		72B5FF4D2090A48100394485 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 72B5FF4C2090A48100394485 /* README.md */; };
 		72CA7BE2209A735500931EDC /* LoggableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72CA7BE1209A735500931EDC /* LoggableView.swift */; };
@@ -68,7 +72,11 @@
 		7250F66D209D5ED3004E03DF /* Demoable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Demoable.swift; sourceTree = "<group>"; };
 		7250F66F209D7DF4004E03DF /* ModalDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalDemo.swift; sourceTree = "<group>"; };
 		7250F671209E4DD0004E03DF /* DemoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoViewModel.swift; sourceTree = "<group>"; };
-		7250F673209E4FF6004E03DF /* Demos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Demos.swift; sourceTree = "<group>"; };
+		72597C7820FCC3AB0089CCDC /* ViewInteractionDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewInteractionDemo.swift; sourceTree = "<group>"; };
+		72597C7A20FCC43C0089CCDC /* DemoDomains.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoDomains.swift; sourceTree = "<group>"; };
+		72597C7C20FCC50E0089CCDC /* UIStoryboard+ViewAlphaUserInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStoryboard+ViewAlphaUserInteraction.swift"; sourceTree = "<group>"; };
+		72597C7E20FCC53B0089CCDC /* AlphaInteractionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlphaInteractionViewController.swift; sourceTree = "<group>"; };
+		72597C8020FCC5D70089CCDC /* AlphaInteractionDemo.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AlphaInteractionDemo.storyboard; sourceTree = "<group>"; };
 		729B6B7B20F98F4D001A1B6C /* README.cn.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.cn.md; sourceTree = "<group>"; };
 		72B5FF4C2090A48100394485 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		72CA7BE1209A735500931EDC /* LoggableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggableView.swift; sourceTree = "<group>"; };
@@ -117,9 +125,9 @@
 		722E438220A63AE5001D3012 /* ModalDemo */ = {
 			isa = PBXGroup;
 			children = (
+				7250F66F209D7DF4004E03DF /* ModalDemo.swift */,
 				7250F66B209D5C89004E03DF /* ThePresentingViewController.swift */,
 				722E438A20A7B38C001D3012 /* ModalDemoViewModel.swift */,
-				7250F66F209D7DF4004E03DF /* ModalDemo.swift */,
 				722E438620A63B43001D3012 /* ModalDemo.storyboard */,
 				722E438C20A7F4BA001D3012 /* UIStoryboard+ModalDemo.swift */,
 			);
@@ -144,7 +152,7 @@
 				7250F66D209D5ED3004E03DF /* Demoable.swift */,
 				7250F671209E4DD0004E03DF /* DemoViewModel.swift */,
 				72D067DB2090A21D0064A8EC /* DemoViewController.swift */,
-				7250F673209E4FF6004E03DF /* Demos.swift */,
+				72597C7A20FCC43C0089CCDC /* DemoDomains.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -159,6 +167,27 @@
 				722E439920A9AB86001D3012 /* LifeCycleDemoViewModel.swift */,
 			);
 			path = LifeCycleDemo;
+			sourceTree = "<group>";
+		};
+		72597C7620FCC35A0089CCDC /* Demo */ = {
+			isa = PBXGroup;
+			children = (
+				72597C7720FCC3750089CCDC /* ViewAlphaUserInteraction */,
+				722E438E20A7FA4F001D3012 /* LifeCycleDemo */,
+				722E438220A63AE5001D3012 /* ModalDemo */,
+			);
+			path = Demo;
+			sourceTree = "<group>";
+		};
+		72597C7720FCC3750089CCDC /* ViewAlphaUserInteraction */ = {
+			isa = PBXGroup;
+			children = (
+				72597C7820FCC3AB0089CCDC /* ViewInteractionDemo.swift */,
+				72597C7C20FCC50E0089CCDC /* UIStoryboard+ViewAlphaUserInteraction.swift */,
+				72597C7E20FCC53B0089CCDC /* AlphaInteractionViewController.swift */,
+				72597C8020FCC5D70089CCDC /* AlphaInteractionDemo.storyboard */,
+			);
+			path = ViewAlphaUserInteraction;
 			sourceTree = "<group>";
 		};
 		72B5FF4B2090A47100394485 /* Documents */ = {
@@ -194,10 +223,9 @@
 		72D067D82090A21D0064A8EC /* UIMatters */ = {
 			isa = PBXGroup;
 			children = (
+				72597C7620FCC35A0089CCDC /* Demo */,
 				722E438520A63B1F001D3012 /* Core */,
 				722E438420A63B0D001D3012 /* Utils */,
-				722E438E20A7FA4F001D3012 /* LifeCycleDemo */,
-				722E438220A63AE5001D3012 /* ModalDemo */,
 				72D067D92090A21D0064A8EC /* AppDelegate.swift */,
 				72D067DD2090A21D0064A8EC /* Main.storyboard */,
 				72D067E02090A21F0064A8EC /* Assets.xcassets */,
@@ -334,6 +362,7 @@
 				722E439220A7FD74001D3012 /* LifeCycleDemo.storyboard in Resources */,
 				72B5FF4D2090A48100394485 /* README.md in Resources */,
 				72D067DF2090A21D0064A8EC /* Main.storyboard in Resources */,
+				72597C8120FCC5D70089CCDC /* AlphaInteractionDemo.storyboard in Resources */,
 				729B6B7C20F98F4E001A1B6C /* README.cn.md in Resources */,
 				722E438720A63B43001D3012 /* ModalDemo.storyboard in Resources */,
 			);
@@ -360,20 +389,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72597C7D20FCC50E0089CCDC /* UIStoryboard+ViewAlphaUserInteraction.swift in Sources */,
+				72597C7920FCC3AB0089CCDC /* ViewInteractionDemo.swift in Sources */,
 				722E438B20A7B38C001D3012 /* ModalDemoViewModel.swift in Sources */,
 				7250F66E209D5ED3004E03DF /* Demoable.swift in Sources */,
 				7250F670209D7DF4004E03DF /* ModalDemo.swift in Sources */,
+				72597C7B20FCC43C0089CCDC /* DemoDomains.swift in Sources */,
 				722E439420A9A11C001D3012 /* LoggableViewController.swift in Sources */,
 				722E439620A9A982001D3012 /* UIStoryboard+LifeCycleDemo.swift in Sources */,
 				722E438D20A7F4BA001D3012 /* UIStoryboard+ModalDemo.swift in Sources */,
 				72CA7BE2209A735500931EDC /* LoggableView.swift in Sources */,
 				72DC0A4020B191D600398BD5 /* LoggableLabel.swift in Sources */,
+				72597C7F20FCC53B0089CCDC /* AlphaInteractionViewController.swift in Sources */,
 				722E439020A7FB85001D3012 /* LifeCycleDemo.swift in Sources */,
 				72D067DC2090A21D0064A8EC /* DemoViewController.swift in Sources */,
 				722E439820A9AA6C001D3012 /* LifeCycleViewController.swift in Sources */,
 				722E438920A7A6DA001D3012 /* UIViewControllerFromStoryboard.swift in Sources */,
 				722E439A20A9AB86001D3012 /* LifeCycleDemoViewModel.swift in Sources */,
-				7250F674209E4FF6004E03DF /* Demos.swift in Sources */,
 				7250F66C209D5C89004E03DF /* ThePresentingViewController.swift in Sources */,
 				72D067DA2090A21D0064A8EC /* AppDelegate.swift in Sources */,
 				72CA7BE4209A75FF00931EDC /* Logger.swift in Sources */,
