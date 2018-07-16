@@ -45,9 +45,7 @@ extension DemoViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.cellIdentifier, for: indexPath)
-        let cellViewModel = viewModel.cellViewModel(at: indexPath)
-        cell.textLabel?.text = cellViewModel.title
-        cell.accessibilityIdentifier = cellViewModel.accessibilityIdentifier
+        cell.textLabel?.text = viewModel.cellTitle(at: indexPath)
         return cell
     }
 }

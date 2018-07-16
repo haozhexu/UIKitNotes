@@ -16,9 +16,9 @@ protocol DemoViewModelDelegate {
 final class DemoViewModel {
     
     private lazy var demoables: [Demoable] = {
-        return [ModalDemo(), LifeCycleDemo()]
+        return [ModalDemo(), LifeCycleDemo(), ViewInteractionDemo()]
     }()
-    
+
     let numberOfSections = 1
     var numberOfRows: Int {
         return demoables.count
@@ -26,9 +26,9 @@ final class DemoViewModel {
     
     var delegate: DemoViewModelDelegate?
     
-    func cellViewModel(at indexPath: IndexPath) -> DemoCellViewModel {
+    func cellTitle(at indexPath: IndexPath) -> String {
         let demoable = demoables[indexPath.row]
-        return DemoCellViewModel(title: demoable.title, accessibilityIdentifier: demoable.identifier)
+        return "\(demoable.identifier.domain.rawValue) - \(demoable.identifier.name)"
     }
     
     func didSelectCell(at indexPath: IndexPath) {
@@ -41,5 +41,4 @@ final class DemoViewModel {
 
 struct DemoCellViewModel {
     let title: String
-    let accessibilityIdentifier: String
 }

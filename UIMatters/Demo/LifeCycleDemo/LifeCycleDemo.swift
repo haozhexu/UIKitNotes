@@ -8,10 +8,13 @@
 
 import UIKit
 
+extension DemoIdentifier {
+    static let lifeCycle = DemoIdentifier(domain: .uiviewcontroller, name: "Life Cycle")
+}
+
 final class LifeCycleDemo: Demoable {
 
-    let title = "Life Cycle Demo"
-    let identifier = Demo.lifeCycle.identifier
+    let identifier = DemoIdentifier.lifeCycle
 
     var viewController: UIViewController {
         let viewController = UIStoryboard.lifeCycleDemoViewController

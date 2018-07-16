@@ -9,10 +9,14 @@
 import Foundation
 import UIKit
 
+extension DemoIdentifier {
+    static let modal = DemoIdentifier(domain: .uiviewcontroller, name: "Modal")
+}
+
 final class ModalDemo: Demoable {
 
     let title = "Modal Demo"
-    let identifier = Demo.modal.identifier
+    let identifier = DemoIdentifier.modal
 
     var viewController: UIViewController {
         return UIStoryboard.modalDemoViewController
