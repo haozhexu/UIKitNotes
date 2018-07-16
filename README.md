@@ -82,9 +82,9 @@ TODO: launching an app without storyboard
   4. use a combination of 2 and/or 3 with `alpha` approximating 0 so that human eyes can't see it
   5. mentally ignore it and visually do not look at it
 
-While the 5th point is joking, the 4th point above isn't, setting a view's `alpha` to nearly zero can be useful in situation where a view cannot be hidden for receiving touch event (hidden view _usually_ won't receive touch events) but user isn't supposed to see it and you want it to avoid certain iOS optimisation behaviour for fully transparent view.
+While the 5th point is joking, the 4th point above isn't, setting a view's `alpha` to nearly zero can be useful in situation where a view cannot be hidden (a view with `hidden = true` is removed from its window) for some reason but user isn't supposed to see it or interact with it.
 
-TODO: find an example use case
+Demo: UIView - Alpha & Interaction
 
 ### `isOpaque`
 
